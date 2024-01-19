@@ -1,0 +1,8 @@
+packages:
+  - apache2
+  - mysql-server
+  - mysql-common
+  - mysql-client
+services:
+  - apache2
+  - mysql

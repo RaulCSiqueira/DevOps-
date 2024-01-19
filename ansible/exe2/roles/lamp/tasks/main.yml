@@ -1,0 +1,27 @@
+- name: Install our packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: true
+
+- name: Abrir porta 80 no firewall
+  ufw:
+    rule: allow
+    port: 80
+
+
+- name: Confirm services are running
+  service:
+    name: "{{ item }}"
+    state: started
+  with_items: "{{ services }}"
+
+
+- name: Enable Apache2 modssl
+  shell: a2enmod ssl
+
+
+- name: Enable Apache2 Default HTTPS site
+  shell: a2ensite default-ssl
+  notify: Restart Apache
+    

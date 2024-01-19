@@ -1,0 +1,5 @@
+- apt: name=libmysqlclient-dev state=present
+- apt: name=python-pip state=present
+- git: repo={{app_repo}} dest="{{app_download_dest}}"
+- pip: requirements={{app_download_dest}}/app/requirements.txt
+- copy: src={{app_download_dest}}/app/ dest={{app_dest}}

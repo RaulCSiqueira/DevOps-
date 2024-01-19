@@ -1,0 +1,3 @@
+- apt: name=python-mysqldb state=present
+- mysql_user: name=appuser password=94nfsUl7 priv=*.*:ALL state=present
+- mysql_db: name=appdata state=present

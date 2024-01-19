@@ -1,0 +1,3 @@
+app_download_dest: /tmp/webapp
+app_dest: /var/www/webapp
+app_repo: https://github.com/cloudacademy/ansible_demo.git
