@@ -1,11 +1,12 @@
+# Comando para instalar Python v 3
 FROM python:3
-
+# Defina o diretorio de trabalho no sistema de arquivops da imagem
 WORKDIR /usr/src/app
-
+# comando para copiar todo os arquivos do diretorios para o container
 COPY . .
-
+# instalar os codigos que esta odentro do arquivos
 RUN pip install --no-cache-dir -r requirements.txt
-
+# abrir a porta 5000
 EXPOSE 5000
-
+# set o comando para rodar o app
 CMD [ "python", "src/app.py" ]
