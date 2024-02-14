@@ -4,9 +4,9 @@ metadata:
   name: basic
   namespace: red
 spec:
+  restartPolicy: OnFailure
   containers:
     - name: ngnix-conteiner
       image: nginx:stable-alpine-perl
-      restartPolicy: OnFailure
       ports:
       - containerPort: 80
