@@ -1,3 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudforce
+  namespace: ca1
+spec:
+  replicas: 1  # adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: cloudforce
+  template:
+    metadata:
+      labels:
+        app: cloudforce
+    spec:
+      containers:
+      - name: cloudforce-container
+        image: your-image:tag  # replace with the actual image details
+        ports:
+        - containerPort: 80
+---
 apiVersion: v1
 kind: Service
 metadata:
