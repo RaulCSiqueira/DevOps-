@@ -1,5 +1,5 @@
-ApiVersion: v1
-kind: Deployment 
+apiVersion: v1
+kind: Service
 metadata:
   name: cloudforce-svc
   namespace: ca1
@@ -9,6 +9,6 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      NodePort: 32080
+      targetPort: 80
+      nodePort: 32080
   type: NodePort
-      
