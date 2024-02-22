@@ -1,0 +1,37 @@
+pipeline {
+agent {
+  label 'master'
+}
+tools {
+  gradle 'gradle-4.10.2'
+}
+environment {
+  VERSION = "jellybean"
+}
+stages{
+stage('Checkout') {
+  steps {
+            checkout([$class: 'GitSCM',
+                branches: [[name: 'master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/cloudacademy/devops-webapp.git']]            
+            ]) 
+  }
+}
+stage('Details') {
+  steps {
+            echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
+            echo "${env.VERSION}"
+  }
+
+  when {
+    environment name: 'VERSION', value: 'jellybean'
+  }
+}
+stage('Build') {
+  steps {
+        sh "gradle build"
+  }
+}
+}
+}

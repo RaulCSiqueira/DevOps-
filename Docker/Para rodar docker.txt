@@ -1,0 +1,15 @@
+docker pull jenkins/jenkins:lts
+
+
+docker run \
+-u root \
+--rm \
+-d \
+-p 8080:8080 \
+-p 50000:50000 \
+-v jenkins-vol:/var/jenkinshome \
+-v /var/run/docker.sock:/var/run/docker.sock
+jenkins/jnekins:lts
+
+
+05663615e92d4037a8cd107d5ec77cef
