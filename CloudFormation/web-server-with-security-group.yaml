@@ -1,0 +1,81 @@
+#Hello-world CloudAcademy lessors How to user cloud formation for automation Teacher - Alana Layton
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Creates EC2 instance with an Apache web servber installed with a securiry group tat enables HTTP and SSH Traffic'
+Parameters:
+  InstanceType:
+    Description: EC2 instance type for webserver
+    type: String
+    Default: t2.micro
+    AllowedValues:
+    - t2.micro
+    - t2.samll
+    - t2.nano
+    ConstraintDescription: Must be a valid EC2 instance 
+  KeyName:
+    Description: Name of an existing EC2 KeyPair ir to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair
+  SSHLocation:
+    Description: The IP address range that can be used to SSH into the EC2 instance via port 22
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+Mappings:
+  RegionMap:
+    us-east-1:
+      HVM64: ami- #some number of EC2 machine
+      HVMG2: ami- #some number of EC2 machine
+    us-west-1:
+      HVM64: ami- #some number of EC2 machine
+      HVMG2: ami- #some number of EC2 machine
+    eu-west-1:
+      HVM64: ami- #some number of EC2 machine
+      HVMG2: ami- #some number of EC2 machine
+    ap-northeast-1:
+      HVM64: ami- #some number of EC2 machine
+      HVMG2: ami- #some number of EC2 machine
+    ap-southeast-1:
+      HVM64: ami- #some number of EC2 machine
+      HVMG2: ami- #some number of EC2 machine
+Resources:
+  EC2Instace:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", HVM64]
+      KeyName: !Ref KeyName
+      UserData:
+        Fn::Join:
+        - "\n"
+        - - "#!/bin/bash"
+          - sudo yum update -y
+          - sudo yum install httpd -y
+          - sudo /etc/init.d/httpd start
+          - echo "<html><body><h1>Hello from Cloud Acadmey!</h1>" > /var/www/html/index.html
+          - echo "</body></html>" >> /var/www/html/index.html
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH Access via port 22
+      SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIp: !Ref SSHLocation
+      SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 80
+            ToPort: 80
+            CidrIp: 0.0.0.0/0
+Outputs:
+  AZ:
+    Description: AZ of the newly create EC2 instance
+    Value: !GetAtt EC2Instace.AvailabilityZone
+  PublicIP:
+    Description: Public IP of the newly created EC2 Instance
+    Value: !GetAtt EC2Instace.PublicIp
