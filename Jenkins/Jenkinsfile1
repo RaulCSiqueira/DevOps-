@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+    
+    tools {nodejs “node”}
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'http://github.com/henriqueebraga/book-tracker.git'
+            }
+        }
+
+        stage('Client Side - Install Dependencies and Start Development Server') {
+            steps {
+                script {
+                    sh 'npm install'
+                    sh 'npm run start'
+                    
+                }
+            }
+        }
+
+        stage('Client Side - Build Project') {
+            steps {
+                script {
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Server Side - Install Dependencies') {
+            steps {
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Server Side - Start Server') {
+            steps {
+                script {
+                    sh 'npm run start'
+                    
+                }
+            }
+        }
+
+        stage('Server Side - Start Server with Nodemon (Development)') {
+            steps {
+                script {
+                    sh 'npm run start-dev'
+                    
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                sh 'npm run start'
+                sh 'npm run start-dev'
+            }
+            // Clean up processes when the pipeline finishes
+        }
+
+        success {
+            echo 'Pipeline succeeded!'
+        }
+
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
